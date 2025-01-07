@@ -220,10 +220,7 @@ const Signup = () => {
     setMessage("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/signup",
-        formData
-      );
+      const response = await axios.post(`${apiUrl}/auth/signup`, formData);
       setMessage(response.data.msg);
       setFormData({ name: "", email: "", password: "" });
       navigate("/");
