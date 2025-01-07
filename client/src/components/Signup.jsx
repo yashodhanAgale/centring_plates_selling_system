@@ -195,13 +195,10 @@ const Signup = () => {
     setOtpMessage("");
     setOtpError("");
     try {
-      const response = await axios.post(
-        "http://localhost:5001/otp/verify-email",
-        {
-          email: formData.email,
-          enteredOtp: otp,
-        }
-      );
+      const response = await axios.post(`${apiUrl}/otp/verify-email`, {
+        email: formData.email,
+        enteredOtp: otp,
+      });
       setOtpMessage(response.data.message || "Email verified successfully.");
       setIsEmailVerified(true);
       setOtpModal(false);
