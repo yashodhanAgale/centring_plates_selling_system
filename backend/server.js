@@ -22,7 +22,7 @@ app.use("/request", requestRoutes);
 app.use("/otp", verificationRoutes);
 app.use("/admin", adminRoutes);
 
-const PORT = process.env.DB_PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
