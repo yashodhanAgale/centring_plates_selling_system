@@ -16,7 +16,15 @@ require("dotenv").config();
 //     origin: "https://centring-plates-selling-fm3w.vercel.app",
 //   })
 // );
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://centring-plates-selling-fm3w.vercel.app", // Allow only your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
+
 // app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded data
