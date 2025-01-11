@@ -34,10 +34,10 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/auth", authRoutes);
-app.use("/request", requestRoutes);
-app.use("/otp", verificationRoutes);
-app.use("/admin", adminRoutes);
+app.use("/", authRoutes);
+app.use("/", requestRoutes);
+app.use("/", verificationRoutes);
+app.use("/", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
