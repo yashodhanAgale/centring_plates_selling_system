@@ -21,6 +21,10 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded data
 
+app.get("/", (req, res) => {
+  res.send("Hello, form the plates selling server Backend!!");
+});
+
 // Routes
 app.use("/auth", authRoutes);
 app.use("/request", requestRoutes);
