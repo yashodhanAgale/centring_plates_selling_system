@@ -20,7 +20,7 @@ require("dotenv").config();
 
 app.use(
   cors({
-    origin: "https://centring-plates-selling-fm3w.vercel.app", // Allow only your frontend
+    origin: "https://centring-plates-selling.vercel.app", // Allow only your frontend
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
