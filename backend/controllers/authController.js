@@ -1,3 +1,118 @@
+// const db = require("../config/db");
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+
+// // Email validation function
+// const isValidEmail = (email) => {
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format validation
+//   return emailRegex.test(email);
+// };
+
+// // Password validation function
+// const isValidPassword = (password) => {
+//   const passwordRegex = /^\d{4,6}$/; // Only 4-6 digits allowed
+//   return passwordRegex.test(password);
+// };
+
+// // vslidate the phone number
+
+// // const isValidPhoneNumber = (phoneNumber) => {
+// //   const phoneRegex = /^\d{10}$/; // Only 10 digits allowed
+// //   return phoneRegex.test(phoneNumber);
+// // };
+// // Signup Controller
+// const signup = async (req, res) => {
+//   const { name, email, password } = req.body;
+//   console.log("This is req.body: ", req.body);
+
+//   try {
+//     // Check if email already exists
+//     const [result] = await db.execute(
+//       "SELECT email FROM users WHERE email = ?",
+//       [email]
+//     );
+//     console.log("Result from SELECT:", result);
+
+//     if (result.length > 0) {
+//       return res.status(400).json({ msg: "User already exists" });
+//     }
+
+//     // Hash the password
+//     const hash = await bcrypt.hash(password, 10);
+
+//     // Insert new user
+//     await db.query(
+//       "INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, 'user')",
+//       [email, hash, name]
+//     );
+
+//     res.status(201).json({ msg: "User registered successfully" });
+//   } catch (err) {
+//     console.error("Error in signup function:", err.message); // Log error
+//     res.status(500).json({ msg: "Internal server error" });
+//   }
+// };
+
+// // Login Controller
+// const login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     // Validate email format
+//     if (!isValidEmail(email)) {
+//       return res.status(400).json({ msg: "Invalid email format" });
+//     }
+
+//     // Check if the user exists
+//     const [result] = await db.execute("SELECT * FROM users WHERE email = ?", [
+//       email,
+//     ]);
+
+//     // If user doesn't exist
+//     if (result.length === 0) {
+//       return res.status(400).json({ msg: "User does not exist" });
+//     }
+
+//     const user = result[0];
+
+//     // Compare the password with the hashed password
+//     const isMatch = await bcrypt.compare(password, user.password);
+
+//     // If password does not match
+//     if (!isMatch) {
+//       return res.status(400).json({ msg: "Invalid password" });
+//     }
+
+//     // Generate a token with the user's full name
+//     const token = jwt.sign(
+//       {
+//         name: user.name,
+//         id: user.id,
+//         role: user.role,
+//         email: user.email,
+//       },
+//       (secretKey = "yash")
+//     );
+
+//     // Password is correct, proceed with login
+//     res.status(200).json({
+//       msg: "Login successful",
+//       token, // Send the token back to the client
+//       user: {
+//         email: user.email,
+//         name: user.name,
+//         id: user.id,
+//         role: user.role,
+//         phoneNumber: user.phoneNumber,
+//       },
+//     });
+//     console.log(user);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ msg: "Internal server error" });
+//   }
+// };
+
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -20,6 +135,7 @@ const isValidPassword = (password) => {
 //   const phoneRegex = /^\d{10}$/; // Only 10 digits allowed
 //   return phoneRegex.test(phoneNumber);
 // };
+
 // Signup Controller
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -27,9 +143,10 @@ const signup = async (req, res) => {
 
   try {
     // Check if email already exists
-    const [result] = await db.query("SELECT email FROM users WHERE email = ?", [
-      email,
-    ]);
+    const [result] = await db.execute(
+      "SELECT email FROM users WHERE email = ?",
+      [email]
+    );
     console.log("Result from SELECT:", result);
 
     if (result.length > 0) {
@@ -40,7 +157,7 @@ const signup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     // Insert new user
-    await db.query(
+    await db.execute(
       "INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, 'user')",
       [email, hash, name]
     );
@@ -63,7 +180,7 @@ const login = async (req, res) => {
     }
 
     // Check if the user exists
-    const [result] = await db.query("SELECT * FROM users WHERE email = ?", [
+    const [result] = await db.execute("SELECT * FROM users WHERE email = ?", [
       email,
     ]);
 
@@ -122,7 +239,7 @@ const updateUser = async (req, res) => {
 
   try {
     // Fetch the current user details
-    const [rows] = await db.query("SELECT password FROM users WHERE id = ?", [
+    const [rows] = await db.execute("SELECT password FROM users WHERE id = ?", [
       userId,
     ]);
 
@@ -185,7 +302,7 @@ const updateUser = async (req, res) => {
     values.push(userId);
 
     // Execute the query
-    const [result] = await db.query(query, values);
+    const [result] = await db.execute(query, values);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "User not found" });
