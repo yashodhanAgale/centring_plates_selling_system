@@ -24,7 +24,9 @@ const isValidPassword = (password) => {
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   console.log("This is req.body: ", req.body);
+
   try {
+    // Check if email already exists
     const [result] = await db.query("SELECT email FROM users WHERE email = ?", [
       email,
     ]);
@@ -34,14 +36,18 @@ const signup = async (req, res) => {
       return res.status(400).json({ msg: "User already exists" });
     }
 
+    // Hash the password
     const hash = await bcrypt.hash(password, 10);
+
+    // Insert new user
     await db.query(
-      "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
+      "INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, 'user')",
       [email, hash, name]
     );
+
     res.status(201).json({ msg: "User registered successfully" });
   } catch (err) {
-    console.error("Error in signup function:", err); // Log detailed error
+    console.error("Error in signup function:", err.message); // Log error
     res.status(500).json({ msg: "Internal server error" });
   }
 };
