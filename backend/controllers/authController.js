@@ -23,44 +23,25 @@ const isValidPassword = (password) => {
 // Signup Controller
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
-
+  console.log("This is req.body: ", req.body);
   try {
-    // Validate email format
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ msg: "Invalid email format" });
-    }
-
-    // Validate password format (4-6 digits)
-    if (!isValidPassword(password)) {
-      return res.status(400).json({ msg: "Password must be 4-6 digits" });
-    }
-
-    //validate the phone number
-    // if (!isValidPhoneNumber(phoneNumber)) {
-    //   return res.status(400).json({ msg: "Invalid phone number" });
-    // }
-
-    // Check if the user already exists
     const [result] = await db.query("SELECT email FROM users WHERE email = ?", [
       email,
     ]);
+    console.log("Result from SELECT:", result);
 
     if (result.length > 0) {
       return res.status(400).json({ msg: "User already exists" });
     }
 
-    // Hash the password
     const hash = await bcrypt.hash(password, 10);
-
-    // Insert user into the database
     await db.query(
-      "INSERT INTO users ( email, password, name) VALUES (?, ?, ?)",
+      "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
       [email, hash, name]
     );
-
     res.status(201).json({ msg: "User registered successfully" });
   } catch (err) {
-    console.error(err);
+    console.error("Error in signup function:", err); // Log detailed error
     res.status(500).json({ msg: "Internal server error" });
   }
 };
