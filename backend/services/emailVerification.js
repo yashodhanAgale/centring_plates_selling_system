@@ -40,9 +40,9 @@ exports.sendEmailOtp = async (req, res) => {
 
   // Email content
   const mailOptions = {
-    from: '"Ollato Support" <info@ollato.com>', // Sender address
+    from: '"Team Vyankateshwara Construction', // Sender address
     to: email, // Receiver email
-    subject: "Your Ollato OTP Code",
+    subject: "Email Verification",
     text: `Your OTP code is ${otp}. It is valid for 5 minutes. Please do not share it with anyone.`,
   };
 
